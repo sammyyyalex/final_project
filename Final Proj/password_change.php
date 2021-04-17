@@ -41,9 +41,25 @@
 
 
 <?php
-session_start();
-$id = $_SESSION["userID"];
-$con = mysqli_connect('127.0.0.1:3306','root','','admin') or die('Unable To connect');
+require ('db.php');
+class connect_database{
+    private $hostname = "localhost";
+    private $username = "root";
+    private $password = "";
+    private $dbname = "Final_Project"; // fill in your database name containing tables: products and categories
+    public $conn = NULL;
+
+    public function connectDb(){
+        try{
+            $this->conn = new PDO("mysql:host=$this->hostname;dbname=$this->dbname", $this->username, $this->password);
+			//if($this->conn !=null){echo "successfully connected";}
+        }
+        catch(PDOException $e){
+            $error_out->http_error("500 Internal Server Error\n\n"."There was a SQL error:\n\n". $e->getMessage());
+        }
+        return $this->conn;
+    }
+}
 
 
 $username = $_POST['userName'];
