@@ -44,10 +44,11 @@ class checkUserName{
 class checkPassword{
 	public $followsRules;
 	public $notUsed;
+	public $correctPass;
 
 	//checking rules function 
 	public function check_rules($password){
-		$pattern = "/^(?=.\d)(?=.[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,30}$/";
+		$pattern = "/(?=.?[A-Z])(?=.?[a-z])(?=.*?[0-9]).{7,30}/";
 		if (preg_match($pattern, $password)){
 			//if something in the pattern matches, it DOES follow rules
 			$followsRules = TRUE;
@@ -59,21 +60,50 @@ class checkPassword{
 		return $followsRules;
 	}
 
-	//checking notUsed before 
-	// public function check_notUsed($password){
-	// 	$query = "SELECT userPassword FROM users WHERE userName = '$username'";
-	// 	$conn_process = new connect_database();
-	// 	$conn = $conn_process ->connectDb();
-	// 	$run_process = new running_SQL();
-	// 	$results = $run_process->runQuery($conn, $query);
-	// 	if ($results==$password){
-	// 		$notUsed = FALSE;
-	// 	}
-	// 	else{
-	// 		$notUsed = TRUE;		
-	// 	}
-	// 	return $notUsed;
-	// }
+	//checking if current password correct
+	public function check_password($password, $username){
+		$query = "SELECT userPassword FROM users WHERE userName = '$username' AND userPassword='$password'";
+		$conn_process = new connect_database();
+		$conn = $conn_process ->connectDb();
+		$run_process = new running_SQL();
+		$results = $run_process->runQuery($conn, $query);
+		if (empty($results)){
+			$correctPass = FALSE;
+		}
+		else{
+			$correctPass = TRUE;	
+		}
+		return $correctPass;
+	}
+
+	//checking notUsed 
+	public function check_notUsed($password, $username){
+		$query = "SELECT oldPassword FROM users WHERE userName = '$username'";
+		$conn_process = new connect_database();
+		$conn = $conn_process ->connectDb();
+		$run_process = new running_SQL();
+		$results = $run_process->runQuery($conn, $query);
+		if ($results[0]===$password){
+			echo "Password cannot be the same as your old password!";
+			$notUsed = FALSE;
+		}
+		else{
+			$query = "SELECT oldestPassword FROM users WHERE userName = '$username'";
+			$conn_process = new connect_database();
+			$conn = $conn_process ->connectDb();
+			$run_process = new running_SQL();
+			$results = $run_process->runQuery($conn, $query);
+			if ($results[0]===$password){
+				echo "Password cannot be the same as one of your previous two passwords!";
+				$notUsed = FALSE;
+			}
+			else{
+				echo "Password can be changed!";
+				$notUsed = TRUE;
+			}	
+		}
+		return $notUsed;
+	}
 }
 
 class users{
@@ -112,18 +142,60 @@ class users{
 		}
 	}
 
-	//NOT fully functional -> needs to check previous two passwords, and regex for checking reqs doesn't work
-	public function update_userPassword($password){
+	//NOT fully functional -> Output is "Array" when trying to get results so old password and oldest password not properly updated
+	public function update_userPassword($new_password, $username, $password){
 		$check = new checkPassword();
-		if ( ($check->check_rules($password)) ){
-			$query = "UPDATE users SET userPassword = '$password' WHERE userID=$this->userID";
+		if ( ($check->check_rules($new_password)) && $check->check_password($password, $username) && $check->check_notUsed($password, $username)){
+			//gets old password
+			$query = "SELECT oldPassword FROM users WHERE userName='$username'";
 			$conn_process = new connect_database();
 			$conn = $conn_process ->connectDb();
 			$run_process = new running_SQL();
 			$results = $run_process->runQuery($conn, $query);
+			echo "<br>Got results from query<br> ";
+			echo $results;
+			// $results = implode(" ",$results);
+			echo "<br>Got old password...<br> ";
+			echo $results;
+
+			//changes oldest password to old password
+			$query = "UPDATE users SET oldestPassword='$results' WHERE userName='$username'";
+			$conn_process = new connect_database();
+			$conn = $conn_process ->connectDb();
+			$run_process = new running_SQL();
+			$results = $run_process->runQuery($conn, $query);
+			echo "<br>Changed oldest password to old password...<br> ";
+
+			//gets current password
+			$query = "SELECT userPassword FROM users WHERE userName='$username'";
+			$conn_process = new connect_database();
+			$conn = $conn_process ->connectDb();
+			$run_process = new running_SQL();
+			$results = $run_process->runQuery($conn, $query);
+			// $results = implode(" ",$results);
+			echo "<br>Got current password...<br> ";
+
+			//changes old password to current password
+			$query = "UPDATE users SET oldPassword='$results' WHERE userName='$username'";
+			$conn_process = new connect_database();
+			$conn = $conn_process ->connectDb();
+			$run_process = new running_SQL();
+			$results = $run_process->runQuery($conn, $query);
+			echo "<br>Changed old password to current password...<br> ";
+
+			//updates current password
+			$query = "UPDATE users SET userPassword = '$new_password' WHERE userID=$this->userID";
+			$conn_process = new connect_database();
+			$conn = $conn_process ->connectDb();
+			$run_process = new running_SQL();
+			$results = $run_process->runQuery($conn, $query);
+			echo "<br>Updated!<br> ";
+		}
+		else if ($check->check_rules($new_password)){
+			echo "<br>Incorrect current password. Please try again!<br> ";
 		}
 		else{
-			echo "<br> This password does not fulfill the requirements. Please choose a different password!<br>";
+			echo "<br>This password does not fulfill the requirements. Please choose a different password!<br>";
 		}
 	}
 }
@@ -140,7 +212,11 @@ echo "4: Update a user's username. <br>";
 $run_users->userID=1;
 //$run_users->userName="oliviaaa"; //oliviarodrigo
 //$run_users->update_userName("orodrigo"); 
-$run_users->update_userPassword("j0shSuxxx");
+
+// $run_pass = new checkPassword();
+// $run_pass->check_notUsed("joshsux", "Username");
+// $run_users->displayUsers();
+$run_users->update_userPassword("Passwor1D", "oliviarodrigo", "password");
 $run_users->displayUsers();
 echo "<p style=text-align:center>=== <br><p>";
 ?>
