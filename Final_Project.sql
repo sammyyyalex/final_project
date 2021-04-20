@@ -22,6 +22,8 @@ CREATE TABLE users (
   userPassword      VARCHAR(128)   DEFAULT NULL, 
   firstName         VARCHAR(600)   DEFAULT NULL,
   lastName          VARCHAR(600)   DEFAULT NULL,
+  oldPassword       VARCHAR(128)   DEFAULT NULL,
+  oldestPassword    VARCHAR(128)   DEFAULT NULL,
   PRIMARY KEY (userID)
 );
 
