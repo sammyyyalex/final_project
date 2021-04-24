@@ -7,7 +7,7 @@
      </head>
     <body>
     <h1>Change Username</h1>
-   <form method="POST" action="password_change.php">
+   <form method="POST" action="user_change.php">
     <table>
     <tr>
    <td>Enter your Password</td>
