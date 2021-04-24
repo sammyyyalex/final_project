@@ -2,7 +2,7 @@
 <html lang = "en">
 <head>
 	<meta charset = "utf-8">
-	<title>Final Project - User Account Management</title>
+	<title>Final Project - User Account Management: Backend</title>
 </head>
 <body>
 </body>
@@ -48,7 +48,7 @@ class checkPassword{
 
 	//checking rules function 
 	public function check_rules($password){
-		$pattern = "/(?=.?[A-Z])(?=.?[a-z])(?=.*?[0-9]).{7,30}/";
+		$pattern = "/(?=.*[A-Z])(?=.?[a-z])(?=.*?[0-9]).{7,30}/";
 		if (preg_match($pattern, $password)){
 			//if something in the pattern matches, it DOES follow rules
 			$followsRules = TRUE;
@@ -104,6 +104,26 @@ class checkPassword{
 		return $notUsed;
 	}
 }
+
+class checkEmail{
+	public $isUnique;
+
+	public function check_isUnique($email){
+		$query = "SELECT * FROM users WHERE userName = '$email'";
+		$conn_process = new connect_database();
+		$conn = $conn_process ->connectDb();
+		$run_process = new running_SQL();
+		$results = $run_process->runQuery($conn, $query);
+		if (empty($results)){
+			$isUnique = TRUE; 
+		}
+		else{
+			$isUnique = FALSE;
+		}
+		return $isUnique;
+	}
+}
+
 
 class users{
 	public $userID; //categoryID
@@ -214,7 +234,7 @@ $run_users->userID=1;
 // $run_pass = new checkPassword();
 // $run_pass->check_notUsed("joshsux", "Username");
 // $run_users->displayUsers();
-$run_users->update_userPassword("Hamburger1D", "oliviarodrigo", "Passwor1D"); 
+$run_users->update_userPassword("hamBurger1D", "oliviarodrigo", "password"); 
 $run_users->displayUsers();
 echo "<p style=text-align:center>=== <br><p>";
 ?>
