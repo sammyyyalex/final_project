@@ -10,8 +10,15 @@ class connect_database{
         try{
             $this->conn = new PDO("mysql:host=$this->hostname;dbname=$this->dbname", $this->username, $this->password);
 			//if($this->conn !=null){echo "successfully connected";}
+			//$this->conn->setAttribute(PDO:ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+			echo "Connected successfully";
+			/*
+			    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                echo "Connected successfully";
+			*/
         }
         catch(PDOException $e){
+            echo "500 Internal Server Error\n\n"."There was a SQL error:\n\n". $e->getMessage();
             $error_out->http_error("500 Internal Server Error\n\n"."There was a SQL error:\n\n". $e->getMessage());
         }
         return $this->conn;

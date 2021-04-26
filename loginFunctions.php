@@ -1,5 +1,4 @@
 <?php
-require "db.php";
 require 'users.php';
 $uname = $_POST['uname'];
 $password = $_POST['password'];
@@ -32,7 +31,11 @@ if ( none_checker($uname) && none_checker($password)){
 	$check= new checkPassword();
 	if ( $check->check_password($password, $uname) ){
 		//have to redirect to a different page
+		//Should redirect user back to login page with error saying password is incorrect
 	}
-}
+	//need to make function to check if username existing in DB
+} //else
+
+//direct user to main site
 
 ?>

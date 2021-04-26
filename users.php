@@ -39,6 +39,8 @@ class checkUserName{
 		}
 		return $noSpecialChars;
 	}
+
+	//make function that checks if username is in db
 }
 
 class checkPassword{
