@@ -18,8 +18,8 @@
 				<label for="last">Last name:</label>
 				<input type="text" class="text" name="last" id="LastName" placeholder=" Last Name">
 				<p >&nbsp;  </p>
-				Email: <br>
-				<input type="text" name="email" id="Email" class="text"  placeholder=" Email address">
+				<label for='email'>Email:</label>
+				<input type="text" class="text" name="email" id="Email" placeholder=" Email address">
 				<p >&nbsp;  </p>
 				Username: <br>
 				<input type="text" class="text" name="uname" id="uname" placeholder="Pick a username">
