@@ -21,12 +21,12 @@ class checkUserName{
 		$run_process = new running_SQL();
 		$results = $run_process->runQuery($conn, $query);
 		if (empty($results)){
-			$isUnique = TRUE; 
+			return true;
 		}
 		else{
-			$isUnique = FALSE;
+			header("Location: register.php?error=Username is already in use");
+                        exit();
 		}
-		return $isUnique;
 	}
 
 	public function check_noSpecialChars($username){
@@ -117,12 +117,12 @@ class checkEmail{
 		$run_process = new running_SQL();
 		$results = $run_process->runQuery($conn, $query);
 		if (empty($results)){
-			$isUnique = TRUE; 
+			return true;
 		}
 		else{
-			$isUnique = FALSE;
+			header("Location: register.php?error=Email is already registered");
+            exit();
 		}
-		return $isUnique;
 	}
 }
 
