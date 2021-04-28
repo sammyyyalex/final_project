@@ -25,17 +25,13 @@ function email_checker($input){
 }
 
 if ( none_checker($uname) && none_checker($password)){
-	if (email_checker($uname)){
-		echo "<br>Username is an email!<br>";
-	}
 	$check= new checkPassword();
 	if ( $check->check_password($password, $uname) ){
-		//have to redirect to a different page
-		//Should redirect user back to login page with error saying password is incorrect
+		if (email_checker($uname)){
+			echo(alert("<br>Username is an email!<br>"));
+		}
+		header("Location: welcome.php");
 	}
-	//need to make function to check if username existing in DB
-} //else
-
-//direct user to main site
-
+} 
+//Get an error to popup if not valid login credentials
 ?>

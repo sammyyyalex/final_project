@@ -71,7 +71,7 @@ if ( none_checker($fname) && none_checker($lname) && none_checker($email) && non
 						$conn = $conn_process ->connectDb();
 						$run_process = new running_SQL();
 						$results = $run_process->runQuery($conn, $query);
-						header("Location: login.php"); //Will direct user to index.php in login folder
+						header("Location: login.php"); 
 					}
 				}
 			}
@@ -79,4 +79,5 @@ if ( none_checker($fname) && none_checker($lname) && none_checker($email) && non
 	}
 }
 
+//Can't get error messages to popup on register page
 ?>
