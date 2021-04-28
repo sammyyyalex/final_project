@@ -24,8 +24,8 @@ class checkUserName{
 			return true;
 		}
 		else{
-			header("Location: register.php?error=Username is already in use");
-                        exit();
+			header("Location: register.php?error=Username is already taken");
+                            exit();
 		}
 	}
 
@@ -111,21 +111,20 @@ class checkEmail{
 	public $isUnique;
 
 	public function check_isUnique($email){
-		$query = "SELECT * FROM users WHERE userName = '$email'";
+		$query = "SELECT * FROM users WHERE email = '$email'";
 		$conn_process = new connect_database();
 		$conn = $conn_process ->connectDb();
 		$run_process = new running_SQL();
 		$results = $run_process->runQuery($conn, $query);
 		if (empty($results)){
-			return true;
-		}
-		else{
-			header("Location: register.php?error=Email is already registered");
+        	return true;
+        }
+        else{
+        	header("Location: register.php?error=An account already registered with that email");
             exit();
-		}
-	}
+        }
 }
-
+}
 
 class users{
 	public $userID; //categoryID
