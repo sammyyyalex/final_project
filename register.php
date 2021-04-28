@@ -11,6 +11,9 @@
 	<body>
 		<div class="container">
 			<h1 class="title">Register</h1>
+			<?php if (isset($_GET['error'])){?>
+                           <p class="errorME"><?php echo $_GET['error']; ?></p>
+                            <?php } ?>
 			<form method="post" action="registerFunctions.php">
 				<label for="first">First name:</label>
 				<input type="text" class="text" name="first"  id="FirstName" placeholder=" First Name">
