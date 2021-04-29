@@ -77,6 +77,7 @@ if ( none_checker($fname) && none_checker($lname) && none_checker($email) && non
 			}
 		}
 	}
-}
+}//else no empty fields allowed
+
 
 ?>

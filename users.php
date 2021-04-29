@@ -21,12 +21,12 @@ class checkUserName{
 		$run_process = new running_SQL();
 		$results = $run_process->runQuery($conn, $query);
 		if (empty($results)){
-			return true;
+			$isUnique = TRUE;
 		}
 		else{
-			header("Location: register.php?error=Username is already taken");
-                            exit();
+			$isUnique = FALSE;
 		}
+		return $isUnique;
 	}
 
 	public function check_noSpecialChars($username){
@@ -146,10 +146,10 @@ class users{
 	}
 
 	//WORKS!
-	public function update_userName($username){
+	public function update_userName($username, $new_username){
 		$check = new checkUserName();
-		if ( ($check->check_isUnique($username)) &&  $check->check_noSpecialChars($username)) {
-			$query = "UPDATE users SET userName = '$username' WHERE userID=$this->userID";
+		if ( $check->check_noSpecialChars($username)) { 
+			$query = "UPDATE users SET userName = '$new_username' WHERE userName='$username'";
 			$conn_process = new connect_database();
 			$conn = $conn_process ->connectDb();
 			$run_process = new running_SQL();
@@ -163,7 +163,6 @@ class users{
 		}
 	}
 
-	//NOT fully functional -> Output is "Array" when trying to get results so old password and oldest password not properly updated
 	public function update_userPassword($new_password, $username, $password){
 		$check = new checkPassword();
 		if ( ($check->check_rules($new_password)) && $check->check_password($password, $username) && $check->check_notUsed($password, $username)){
@@ -199,7 +198,7 @@ class users{
 			$results = $run_process->runQuery($conn, $query);
 			
 			//updates current password
-			$query = "UPDATE users SET userPassword = '$new_password' WHERE userID=$this->userID";
+			$query = "UPDATE users SET userPassword='$new_password' WHERE userName='$username'";
 			$conn_process = new connect_database();
 			$conn = $conn_process ->connectDb();
 			$run_process = new running_SQL();
@@ -220,22 +219,22 @@ class users{
 }
 
 
-$run_users = new users();
-echo "1: Display the original users table. <br>";
-$run_users->displayUsers();
-echo "<p style=text-align:center>=== <br><p>";
-
-//Will just have to adapt functionality so that once a user is logged in, their ID is attached so that don't have to declare userID
-echo "4: Update a user's username. <br>";
-//$run_users->userID=$this->userID?
-$run_users->userID=1;
-//$run_users->userName="oliviaaa"; //oliviarodrigo
-//$run_users->update_userName("orodrigo"); 
-
-// $run_pass = new checkPassword();
-// $run_pass->check_notUsed("joshsux", "Username");
+// $run_users = new users();
+// echo "1: Display the original users table. <br>";
 // $run_users->displayUsers();
-$run_users->update_userPassword("hamBurger1D", "oliviarodrigo", "password"); 
-$run_users->displayUsers();
-echo "<p style=text-align:center>=== <br><p>";
+// echo "<p style=text-align:center>=== <br><p>";
+
+// // //Will just have to adapt functionality so that once a user is logged in, their ID is attached so that don't have to declare userID
+// echo "4: Update a user's username. <br>";
+// //$run_users->userID=$this->userID?
+// $run_users->userID=1;
+// // $run_users->userName="oliviaaa"; //oliviarodrigo
+// $run_users->update_userName("oliviarodrigo","oliviaaa"); 
+
+// // $run_pass = new checkPassword();
+// // $run_pass->check_notUsed("joshsux", "Username");
+// // $run_users->displayUsers();
+// $run_users->update_userPassword("hamBurger1D", "oliviarodrigo", "password"); 
+// $run_users->displayUsers();
+// echo "<p style=text-align:center>=== <br><p>";
 ?>
