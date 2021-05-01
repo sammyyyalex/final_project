@@ -27,6 +27,7 @@
 				<p >&nbsp;  </p>
 				<br>
 				<a href="db.php"><button type="submit" value="button" class="btn">Change password</button></a>
+				<a href="userAccount.php" class="righttext">Back</a>
 			</form>
 		</div>
 	</body>
