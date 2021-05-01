@@ -30,11 +30,15 @@ if ( none_checker($uname) && none_checker($password)){
 	}
 	$check= new checkPassword();
 	if ( $check->check_password($password, $uname) ){
-		//have to redirect to a different page
-		//Should redirect user back to login page with error saying password is incorrect
+		header("Location: welcome.php");
+	}else {
+		header("Location: login.php?error=Password or username is incorrect.");
+            exit();
 	}
-	//need to make function to check if username existing in DB
-} //else
+}else {
+	header("Location: login.php?error=No empty fields allowed.");
+		exit();
+}
 
 //direct user to main site
 
