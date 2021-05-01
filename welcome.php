@@ -3,14 +3,14 @@
     <h1>Menu</h1>
     <ul>
         <li>
-            <a href="product_manager">User Management</a>
+            <a href="userAccount.php">User Management</a>
         </li>
         <li>
-            <a href="product_catalog">Content table</a>
+            <a href="#">Content table</a>
         </li>
         <br>
          <li>
-              <a href="logout.php">Log Out</a>
+              <a href="login_logout.php">Log Out</a>
          </li>
     </ul>
 </main>
